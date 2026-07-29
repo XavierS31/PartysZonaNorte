@@ -1,11 +1,11 @@
-import { Helmet } from 'react-helmet-async';
-import { business } from '../config/business';
+import { Helmet } from 'react-helmet-async'
+import { business } from '../config/business'
 
 export function Seo({ title, description }: { title?: string; description?: string }) {
-  const full = title ? `${title} | ${business.name}` : `${business.name} | ${business.tagline}`;
+  const full = title ? `${title} | ${business.name}` : `${business.name} | ${business.tagline}`
   const desc =
     description ||
-    'Decoración temática, globos, anchetas y piñatería para fiestas inolvidables en Cartagena, Colombia.';
+    'Decoración temática, globos, anchetas y piñatería para fiestas inolvidables en Cartagena, Colombia.'
 
   return (
     <Helmet>
@@ -20,12 +20,12 @@ export function Seo({ title, description }: { title?: string; description?: stri
           '@context': 'https://schema.org',
           '@type': 'LocalBusiness',
           name: business.name,
-          email: business.email,
+          email: business.contactEmail,
           telephone: business.phone,
           address: business.address,
           openingHours: business.hours,
         })}
       </script>
     </Helmet>
-  );
+  )
 }

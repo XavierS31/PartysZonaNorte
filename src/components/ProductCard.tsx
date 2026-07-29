@@ -1,2 +1,18 @@
-import { motion } from 'framer-motion'; import { Heart, ShoppingBag, Eye } from 'lucide-react'; import { Link } from 'react-router-dom'; import type { Product } from '../types'
-export function ProductCard({product}:{product:Product}){return <motion.article whileHover={{y:-7}} className="group overflow-hidden rounded-3xl border border-pink-100 bg-white shadow-pink"><Link to={`/products/${product.id}`} className="block overflow-hidden"><img src={product.image} alt={product.title} loading="lazy" className="h-56 w-full object-cover transition duration-500 group-hover:scale-105"/></Link><div className="p-5"><div className="mb-3 flex items-center justify-between">{product.badge?<span className="rounded-full bg-pink-100 px-2.5 py-1 text-xs font-bold text-berry">{product.badge}</span>:<span className="text-xs text-muted">{product.category}</span>}<button aria-label={`Agregar ${product.title} a favoritos`} className="rounded-full p-1.5 hover:bg-pink-50"><Heart size={18}/></button></div><Link to={`/products/${product.id}`} className="font-display font-bold hover:text-berry">{product.title}</Link><p className="mt-1 text-sm text-muted">{product.category}</p><div className="mt-4 flex items-center justify-between"><strong className="font-display text-lg text-berry">${product.price.toFixed(2)}</strong><div className="flex gap-2"><Link aria-label={`Ver ${product.title}`} to={`/products/${product.id}`} className="rounded-full bg-cyan-50 p-2 text-cyan"><Eye size={17}/></Link><button aria-label={`Agregar ${product.title} al carrito`} className="rounded-full bg-berry p-2 text-white"><ShoppingBag size={17}/></button></div></div></div></motion.article>}
+import { motion } from 'framer-motion'
+import { ArrowRight, MessageCircle } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import type { Product } from '../types'
+
+export function ProductCard({ product }: { product: Product }) {
+  return (
+    <motion.article whileHover={{ y: -7 }} className="group overflow-hidden rounded-neo border-2 border-ink bg-gradient-to-b from-white via-pink-50 to-white shadow-neo">
+      <img src={product.image} alt={product.title} loading="lazy" className="h-64 w-full object-cover transition duration-500 group-hover:scale-105" />
+      <div className="p-5">
+        <span className="inline-flex rounded-full border border-ink bg-sky px-2.5 py-1 text-xs font-bold text-ink">{product.service}</span>
+        <h2 className="mt-3 font-display text-lg font-bold">{product.title}</h2>
+        <p className="mt-2 text-sm leading-6 text-muted">{product.description}</p>
+        <Link to="/contact" className="neo-btn-primary mt-5 w-full text-xs uppercase"><MessageCircle size={16} />Solicitar información<ArrowRight size={15} /></Link>
+      </div>
+    </motion.article>
+  )
+}

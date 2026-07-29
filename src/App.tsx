@@ -1,5 +1,40 @@
-import { Suspense, lazy } from 'react'; import { Route, Routes, useLocation } from 'react-router-dom'; import { AnimatePresence } from 'framer-motion'; import { Navbar } from './components/Navbar'; import { Footer } from './components/Footer'; import { WhatsApp } from './components/WhatsApp';
-const Home=lazy(()=>import('./pages/Home')); const Products=lazy(()=>import('./pages/Products')); const ProductDetail=lazy(()=>import('./pages/ProductDetail')); const Contact=lazy(()=>import('./pages/Contact'));
-const Categories=lazy(()=>import('./pages/InfoPages').then(m=>({default:m.Categories}))); const Services=lazy(()=>import('./pages/InfoPages').then(m=>({default:m.Services}))); const Gallery=lazy(()=>import('./pages/InfoPages').then(m=>({default:m.Gallery}))); const About=lazy(()=>import('./pages/InfoPages').then(m=>({default:m.About}))); const FAQ=lazy(()=>import('./pages/InfoPages').then(m=>({default:m.FAQ}))); const Legal=lazy(()=>import('./pages/InfoPages').then(m=>({default:m.Legal}))); const NotFound=lazy(()=>import('./pages/InfoPages').then(m=>({default:m.NotFound})));
-function Loading(){return <div className="grid min-h-[60vh] place-items-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-pink-200 border-t-hot" aria-label="Cargando"/></div>}
-export default function App(){const location=useLocation();return <div className="min-h-screen overflow-x-hidden"><Navbar/><main><AnimatePresence mode="wait"><Suspense fallback={<Loading/>}><Routes location={location} key={location.pathname}><Route path="/" element={<Home/>}/><Route path="/products" element={<Products/>}/><Route path="/products/:id" element={<ProductDetail/>}/><Route path="/categories" element={<Categories/>}/><Route path="/services" element={<Services/>}/><Route path="/gallery" element={<Gallery/>}/><Route path="/about" element={<About/>}/><Route path="/faq" element={<FAQ/>}/><Route path="/contact" element={<Contact/>}/><Route path="/privacy" element={<Legal type="Política de privacidad"/>}/><Route path="/terms" element={<Legal type="Términos y condiciones"/>}/><Route path="*" element={<NotFound/>}/></Routes></Suspense></AnimatePresence></main><Footer/><WhatsApp/></div>}
+import { Suspense, lazy } from 'react'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
+import { Navbar } from './components/Navbar'
+import { Footer } from './components/Footer'
+import { WhatsApp } from './components/WhatsApp'
+
+const Home = lazy(() => import('./pages/Home'))
+const Products = lazy(() => import('./pages/Products'))
+const About = lazy(() => import('./pages/About'))
+const Contact = lazy(() => import('./pages/Contact'))
+
+function Loading() {
+  return <div className="grid min-h-[60vh] place-items-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-pink-200 border-t-hot" aria-label="Cargando" /></div>
+}
+
+export default function App() {
+  const location = useLocation()
+
+  return (
+    <div className="min-h-screen overflow-x-hidden bg-gradient-to-b from-pink-50 via-mist to-cyan-50">
+      <Navbar />
+      <main>
+        <AnimatePresence mode="wait">
+          <Suspense fallback={<Loading />}>
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Suspense>
+        </AnimatePresence>
+      </main>
+      <Footer />
+      <WhatsApp />
+    </div>
+  )
+}

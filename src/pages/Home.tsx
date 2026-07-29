@@ -1,95 +1,86 @@
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'
 import {
   ArrowRight,
+  Coffee,
+  Flower2,
   Gift,
+  GraduationCap,
   MessageCircle,
   Palette,
   PartyPopper,
   Phone,
   Sparkles,
   Wind,
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { business } from '../config/business';
-import { Seo } from '../components/Seo';
-import birthdayPhoto from '../../assets/photo6.jpeg';
+} from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { business } from '../config/business'
+import { Seo } from '../components/Seo'
+import { products } from '../data/products'
+import birthdayPhoto from '../../assets/photo6.jpeg'
 
 const services = [
   {
-    title: 'Decoración Temática',
-    description: 'Transformamos tu espacio en mundos mágicos con colores y detalles únicos.',
-    icon: Palette,
-    color: 'bg-hot',
-    cta: 'Ver Programa',
-    link: '/categories',
-  },
-  {
-    title: 'Globos y Arreglos',
-    description: 'Desde arcos gigantes hasta bouquets personalizados que vuelan.',
+    title: 'Bouquet de Globos',
+    description: 'Bouquets personalizados para regalar una sonrisa.',
     icon: Wind,
     color: 'bg-sky',
-    cta: 'Ver Diseños',
-    link: '/products?category=Globos',
+    link: '/products?service=Bouquet%20de%20Globos',
+  },
+  {
+    title: 'Decoraciones con Globos',
+    description: 'Montajes llenos de color para cada celebración.',
+    icon: PartyPopper,
+    color: 'bg-hot text-white',
+    link: '/products?service=Decoraciones%20con%20Globos',
   },
   {
     title: 'Anchetas',
-    description: 'Elegancia y sabor en una sola cesta, ideal para regalar amor.',
+    description: 'Detalles especiales preparados con mucho cariño.',
     icon: Gift,
     color: 'bg-butter',
-    cta: 'Personalizar',
-    link: '/products',
+    link: '/products?service=Anchetas',
+  },
+  {
+    title: 'Desayunos Sorpresas',
+    description: 'Una forma deliciosa de empezar a celebrar.',
+    icon: Coffee,
+    color: 'bg-pink-200',
+    link: '/products?service=Desayunos%20Sorpresas',
+  },
+  {
+    title: 'Arreglos Florales',
+    description: 'Flores y detalles para momentos memorables.',
+    icon: Flower2,
+    color: 'bg-cyan-100',
+    link: '/products?service=Arreglos%20Florales',
   },
   {
     title: 'Piñatería',
-    description: 'La mejor selección de personajes clásicos para las caritas más felices.',
-    icon: PartyPopper,
-    color: 'bg-hot',
-    cta: 'Ver Stock',
-    link: '/products',
-  },
-];
-
-const galleryImages = [
-  {
-    src: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=900&q=85',
-    alt: 'Mesa decorada para fiesta temática',
-    className: 'row-span-2 min-h-[280px] sm:min-h-[420px]',
+    description: 'Todo lo necesario para una fiesta muy divertida.',
+    icon: Palette,
+    color: 'bg-butter',
+    link: '/products?service=Piñater%C3%ADa',
   },
   {
-    src: 'https://images.unsplash.com/photo-1464349153735-7db50ed83c84?auto=format&fit=crop&w=900&q=85',
-    alt: 'Ancheta decorada con globos',
-    className: 'min-h-[130px] sm:min-h-[200px]',
+    title: 'Cursos',
+    description: 'Aprende a crear decoraciones que enamoran.',
+    icon: GraduationCap,
+    color: 'bg-sky',
+    link: '/products?service=Cursos',
   },
-  {
-    src: 'https://images.unsplash.com/photo-1533294455009-a77b7557d2d1?auto=format&fit=crop&w=900&q=85',
-    alt: 'Arco de globos coloridos',
-    className: 'min-h-[130px] sm:min-h-[200px]',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=85',
-    alt: 'Fiesta infantil con detalles temáticos',
-    className: 'min-h-[130px] sm:min-h-[200px]',
-  },
-];
+]
 
 export default function Home() {
   return (
     <>
       <Seo />
-
-      {/* Hero */}
       <section className="bg-hot">
         <div className="shell grid min-h-[540px] items-center gap-8 py-12 lg:grid-cols-2 lg:py-14">
           <div className="relative z-10">
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="neo-badge"
-            >
+            <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="neo-badge">
               <Sparkles size={14} />
               ¡Hacemos tus sueños realidad!
             </motion.p>
-
             <motion.h1
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -98,33 +89,29 @@ export default function Home() {
             >
               Creando momentos inolvidables
             </motion.h1>
-
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               className="mt-6 max-w-lg text-lg leading-8 text-white/95"
             >
-              Especialistas en artículos de decoración para fiestas temáticas, anchetas, piñatería,
-              venta y creación de arreglos a tu gusto.
+              Especialistas en detalles para tus celebraciones: decoraciones, regalos, arreglos y mucho más.
             </motion.p>
-
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
               className="mt-8 flex flex-wrap gap-3"
             >
-              <Link to="/products" className="neo-btn-primary">
-                Ver Catálogo <ArrowRight size={18} />
+              <Link to="/products" className="neo-btn-white">
+                Ver catálogo <ArrowRight size={18} />
               </Link>
               <Link to="/contact" className="neo-btn-teal">
                 <Phone size={18} />
-                Contactanos
+                Contáctanos
               </Link>
             </motion.div>
           </div>
-
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -138,100 +125,84 @@ export default function Home() {
                 className="aspect-[4/5] w-full object-cover"
               />
             </div>
-            
           </motion.div>
         </div>
       </section>
-
-      {/* Services */}
-      <section className="section bg-white">
+      <section className="section bg-gradient-to-br from-white via-pink-100 to-cyan-100">
         <div className="shell">
           <div className="text-center">
             <h2 className="heading">Nuestros Servicios</h2>
             <div className="gold-underline" />
             <p className="copy mx-auto mt-4 text-center">
-              Todo lo que necesitas para que tu evento sea único y lleno de color.
+              Todo lo que necesitas para convertir una ocasión especial en un recuerdo inolvidable.
             </p>
           </div>
-
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {services.map((service, i) => (
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-[repeat(24,minmax(0,1fr))]">
+            {services.map((service, index) => (
               <motion.article
                 key={service.title}
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className="neo-card flex flex-col p-6"
+                transition={{ delay: index * 0.06 }}
+                className={`neo-card flex flex-col p-6 lg:col-span-6 ${index === 4 ? 'lg:col-start-4' : ''}`}
               >
                 <div
-                  className={`grid h-14 w-14 place-items-center rounded-full border-2 border-black ${service.color} shadow-neo`}
+                  className={`grid h-14 w-14 place-items-center rounded-full border-2 border-black shadow-neo ${service.color}`}
                 >
-                  <service.icon size={24} className="text-ink" />
+                  <service.icon size={24} />
                 </div>
                 <h3 className="mt-5 font-display text-sm font-extrabold uppercase tracking-wide">
                   {service.title}
                 </h3>
                 <p className="mt-3 flex-1 text-sm leading-6 text-muted">{service.description}</p>
                 <Link to={service.link} className="neo-btn-white mt-6 w-fit text-xs uppercase">
-                  {service.cta} <ArrowRight size={14} />
+                  Ver catálogo <ArrowRight size={14} />
                 </Link>
               </motion.article>
             ))}
           </div>
         </div>
       </section>
-
-      {/* Gallery / Creations */}
-      <section className="section bg-hot">
+      <section className="section bg-cyan">
         <div className="shell">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <h2 className="heading text-white">Nuestras Creaciones</h2>
               <p className="mt-3 max-w-lg text-white/90">
-                Cada detalle es diseñado con amor. Inspírate con algunos de nuestros proyectos.
+                Cada detalle está diseñado con amor. Inspírate con algunos de nuestros proyectos.
               </p>
             </div>
-            <a
-              href={`https://instagram.com/${business.instagram}`}
-              target="_blank"
-              rel="noreferrer"
-              className="neo-btn-white shrink-0 text-xs uppercase"
-            >
-              Ver todo el Instagram
-            </a>
+            <Link to="/products" className="neo-btn-white shrink-0 text-xs uppercase">
+              Ver catálogo
+            </Link>
           </div>
-
-          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-[1.2fr_1fr] sm:grid-rows-3">
-            {galleryImages.map((img, i) => (
-              <motion.div
-                key={img.alt}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.06 }}
-                className={`overflow-hidden rounded-neo border-2 border-black shadow-neo-lg ${img.className}`}
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {products.slice(0, 4).map((product) => (
+              <div
+                key={product.id}
+                className="overflow-hidden rounded-neo border-2 border-black shadow-neo-lg"
               >
-                <img src={img.src} alt={img.alt} loading="lazy" className="h-full w-full object-cover" />
-              </motion.div>
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  loading="lazy"
+                  className="h-72 w-full object-cover"
+                />
+              </div>
             ))}
           </div>
         </div>
       </section>
-
-      {/* CTA */}
-      <section className="relative overflow-hidden bg-hot pb-16 pt-4 sm:pb-20">
-        <div className="pointer-events-none absolute -left-16 bottom-0 h-48 w-48 rounded-full bg-pink-300/40" />
-        <div className="pointer-events-none absolute -right-10 top-8 h-40 w-40 rounded-full bg-sky/30" />
-
+      <section className="relative overflow-hidden bg-gradient-to-r from-white via-pink-200 to-sky py-16 sm:py-20">
         <div className="shell relative">
-          <div className="neo-card mx-auto max-w-4xl p-8 sm:p-12">
+          <div className="neo-card mx-auto max-w-4xl bg-white/90 p-8 sm:p-12">
             <h2 className="text-center font-display text-2xl font-extrabold uppercase tracking-tight sm:text-3xl">
               ¿Tienes un evento en mente?
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-center text-sm leading-7 text-muted sm:text-base">
-              Cuéntanos tu idea y nosotros nos encargamos de que sea inolvidable. Asesoría
-              personalizada por expertos.
+              Cuéntanos tu idea y nosotros nos encargamos de que sea inolvidable. Asesoría personalizada por
+              expertos.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <a
@@ -243,13 +214,13 @@ export default function Home() {
                 <MessageCircle size={20} />
                 WhatsApp
               </a>
-              <span className="font-display text-xs font-bold uppercase tracking-widest text-muted">
-                Atención inmediata
-              </span>
+              <Link to="/contact" className="neo-btn-teal px-8 py-4 text-base uppercase">
+                Enviar correo
+              </Link>
             </div>
           </div>
         </div>
       </section>
     </>
-  );
+  )
 }
