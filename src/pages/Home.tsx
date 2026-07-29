@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useState } from 'react'
 import {
   ArrowRight,
   Coffee,
@@ -16,7 +17,7 @@ import { Link } from 'react-router-dom'
 import { business } from '../config/business'
 import { Seo } from '../components/Seo'
 import { products } from '../data/products'
-import birthdayPhoto from '../../assets/photo6.jpeg'
+import birthdayPhoto from '../../assets/services/bouquet2.jpeg'
 
 const services = [
   {
@@ -70,7 +71,16 @@ const services = [
   },
 ]
 
+const featuredCreations = [
+  { primaryId: 'decoracion1', alternateId: 'decoracion2' },
+  { primaryId: 'flores2', alternateId: 'flores1' },
+  { primaryId: 'ancheta2', alternateId: 'ancheta1' },
+  { primaryId: 'bouquet1', alternateId: 'bouquet2' },
+]
+
 export default function Home() {
+  const [toggledCreation, setToggledCreation] = useState<string | null>(null)
+
   return (
     <>
       <Seo />
@@ -177,20 +187,49 @@ export default function Home() {
               Ver catálogo
             </Link>
           </div>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {products.slice(0, 4).map((product) => (
-              <div
-                key={product.id}
-                className="overflow-hidden rounded-neo border-2 border-black shadow-neo-lg"
-              >
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  loading="lazy"
-                  className="h-72 w-full object-cover"
-                />
-              </div>
-            ))}
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {featuredCreations.map(({ primaryId, alternateId }, index) => {
+              const primary = products.find((product) => product.id === primaryId)
+              const alternate = products.find((product) => product.id === alternateId)
+              if (!primary || !alternate) return null
+              const isToggled = toggledCreation === primaryId
+              const activeProduct = isToggled ? alternate : primary
+
+              return (
+                <motion.button
+                  key={primaryId}
+                  type="button"
+                  aria-pressed={isToggled}
+                  aria-label={`Cambiar imagen de ${primary.service}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  whileHover={{ y: -10, rotate: index % 2 ? -1.5 : 1.5, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.08, type: 'spring', stiffness: 240, damping: 18 }}
+                  onClick={() => setToggledCreation(isToggled ? null : primaryId)}
+                  className="group relative overflow-hidden rounded-neo border-2 border-black text-left shadow-neo-lg"
+                  style={{ perspective: 1000 }}
+                >
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.img
+                      key={activeProduct.id}
+                      src={activeProduct.image}
+                      alt={activeProduct.title}
+                      initial={{ opacity: 0, scale: 1.1, rotateY: -16 }}
+                      animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                      exit={{ opacity: 0, scale: 0.94, rotateY: 16 }}
+                      transition={{ duration: 0.35 }}
+                      className="h-72 w-full object-cover"
+                    />
+                  </AnimatePresence>
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 via-ink/45 to-transparent p-5 text-white">
+                    <p className="font-display text-sm font-extrabold uppercase">{activeProduct.service}</p>
+                    <p className="mt-1 text-xs text-white/85">Toca para cambiar la creación</p>
+                  </div>
+                </motion.button>
+              )
+            })}
           </div>
         </div>
       </section>
