@@ -187,7 +187,7 @@ export default function Home() {
               Ver catálogo
             </Link>
           </div>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2">
             {featuredCreations.map(({ primaryId, alternateId }, index) => {
               const primary = products.find((product) => product.id === primaryId)
               const alternate = products.find((product) => product.id === alternateId)
@@ -220,7 +220,7 @@ export default function Home() {
                       animate={{ opacity: 1, scale: 1, rotateY: 0 }}
                       exit={{ opacity: 0, scale: 0.94, rotateY: 16 }}
                       transition={{ duration: 0.35 }}
-                      className="h-72 w-full object-cover"
+                      className="h-80 w-full object-cover sm:h-96"
                     />
                   </AnimatePresence>
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 via-ink/45 to-transparent p-5 text-white">

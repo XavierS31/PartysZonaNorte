@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2, Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
 import { business } from '../config/business'
 import { sendContactEmail, type ContactPayload } from '../services/email'
 import { Seo } from '../components/Seo'
@@ -18,12 +19,23 @@ const schema = z.object({
 
 export default function Contact() {
   const [status, setStatus] = useState<{ type: 'ok' | 'error'; text: string } | null>(null)
+  const [params] = useSearchParams()
+  const requestedService = params.get('service')
+  const requestedProduct = params.get('product')
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<ContactPayload>({ resolver: zodResolver(schema) })
+  } = useForm<ContactPayload>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      subject: requestedService ? `Solicitud: ${requestedService}` : '',
+      message: requestedService
+        ? `Hola, me gustaría solicitar algo como ${requestedProduct || 'esta creación'} en la categoría ${requestedService}.`
+        : '',
+    },
+  })
   const submit = async (data: ContactPayload) => {
     setStatus(null)
     try {
@@ -43,10 +55,10 @@ export default function Contact() {
   return (
     <>
       <Seo title="Contacto" />
-      <section className="section bg-gradient-to-br from-pink-100 via-white to-cyan-100">
+      <section className="section bg-sky">
         <div className="shell">
-          <div className="grid gap-10 rounded-neo border-2 border-ink bg-hot p-6 shadow-neo lg:grid-cols-[.8fr_1.2fr] lg:p-10">
-            <div className="text-white">
+          <div className="grid gap-10 rounded-neo border-2 border-ink bg-white p-6 shadow-neo lg:grid-cols-[.8fr_1.2fr] lg:p-10">
+            <div className="rounded-neo border-2 border-ink bg-berry p-6 text-white shadow-neo sm:p-8">
               <p className="neo-badge">Hagamos magia</p>
               <h1 className="mt-5 text-3xl font-extrabold uppercase tracking-tight sm:text-4xl">
                 Cuéntanos sobre tu celebración.
@@ -85,7 +97,7 @@ export default function Contact() {
                     {business.address}
                   </span>
                 </p>
-                <div className="rounded-neo border-2 border-white bg-white/15 p-5">
+                <div className="rounded-neo border-2 border-ink bg-[#25D366] p-5 text-ink shadow-neo">
                   <p className="font-display font-bold">¿Quieres contactarnos por WhatsApp?</p>
                   <a
                     href={`https://wa.me/${business.whatsapp}`}
@@ -102,7 +114,7 @@ export default function Contact() {
             <form
               noValidate
               onSubmit={handleSubmit(submit)}
-              className="rounded-neo border-2 border-ink bg-white/95 p-6 shadow-neo sm:p-8"
+              className="rounded-neo border-2 border-ink bg-cyan p-6 text-white shadow-neo sm:p-8"
             >
               <div className="grid gap-5 sm:grid-cols-2">
                 <label className="text-sm font-bold">
