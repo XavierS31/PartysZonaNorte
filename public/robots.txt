@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://partyzonanorte.com/sitemap.xml
+
+Sitemap: https://partyszonanorte.com/sitemap.xml
