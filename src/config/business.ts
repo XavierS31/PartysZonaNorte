@@ -1,5 +1,5 @@
 export const business = {
-  name: 'PartyZonaNorte',
+  name: 'PartysZonaNorte',
   tagline: 'Expertos en momentos inolvidables',
   phone: '+57 300-8142686',
   whatsapp: '573008142686',

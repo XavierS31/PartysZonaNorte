@@ -12,6 +12,7 @@ import {
 import { Link } from 'react-router-dom';
 import { business } from '../config/business';
 import { Seo } from '../components/Seo';
+import birthdayPhoto from '../../assets/photo6.jpeg';
 
 const services = [
   {
@@ -78,7 +79,7 @@ export default function Home() {
 
       {/* Hero */}
       <section className="bg-hot">
-        <div className="shell grid min-h-[620px] items-center gap-10 py-16 lg:grid-cols-2 lg:py-20">
+        <div className="shell grid min-h-[540px] items-center gap-8 py-12 lg:grid-cols-2 lg:py-14">
           <div className="relative z-10">
             <motion.p
               initial={{ opacity: 0, y: 12 }}
@@ -128,12 +129,12 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="relative mx-auto w-full max-w-xl"
+            className="relative mx-auto w-full max-w-lg"
           >
             <div className="relative overflow-hidden rounded-neo border-2 border-black shadow-neo-lg">
               <img
-                src="https://images.unsplash.com/photo-1464349153735-7db50ed83c84?auto=format&fit=crop&w=1000&q=85"
-                alt="Anchetas y arreglos de regalo"
+                src={birthdayPhoto}
+                alt="Decoración de cumpleaños feliz"
                 className="aspect-[4/5] w-full object-cover"
               />
             </div>
