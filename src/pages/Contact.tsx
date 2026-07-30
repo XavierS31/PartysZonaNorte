@@ -1,12 +1,14 @@
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2, Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
+import { CakeSlice, Flower2, Gift, Loader2, Mail, MapPin, MessageCircle, PartyPopper, Phone, Sprout, ToyBrick } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 import { business } from '../config/business'
 import { sendContactEmail, type ContactPayload } from '../services/email'
 import { Seo } from '../components/Seo'
+import { FloatingBalloon } from '../components/FloatingBalloon'
 
 const schema = z.object({
   firstName: z.string().min(2, 'Escribe tu nombre'),
@@ -55,8 +57,34 @@ export default function Contact() {
   return (
     <>
       <Seo title="Contacto" />
-      <section className="section bg-sky">
-        <div className="shell">
+      <section className="section relative overflow-hidden bg-sky">
+        <div className="absolute inset-0 opacity-20 [background-image:radial-gradient(white_1.2px,transparent_1.2px)] [background-size:19px_19px]" />
+        <motion.div
+          animate={{ y: [0, -12, 0], rotate: [-7, 5, -7] }}
+          transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute left-5 top-12 hidden rounded-neo border-2 border-ink bg-butter p-3 text-ink shadow-neo xl:block"
+        >
+          <CakeSlice size={27} />
+        </motion.div>
+        <motion.div
+          animate={{ y: [0, 12, 0], rotate: [7, -5, 7] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+          className="absolute right-5 top-20 hidden rounded-full border-2 border-ink bg-pink-200 p-3 text-ink shadow-neo xl:block"
+        >
+          <Gift size={27} />
+        </motion.div>
+        <div className="absolute bottom-14 left-[8%] hidden rounded-full border-2 border-ink bg-white p-3 shadow-neo lg:block">
+          <Flower2 size={26} />
+        </div>
+        <div className="absolute bottom-10 right-[10%] hidden rotate-12 rounded-neo border-2 border-ink bg-butter p-3 shadow-neo lg:block">
+          <ToyBrick size={25} />
+        </div>
+        <div className="absolute right-[19%] top-[46%] hidden rounded-full border-2 border-ink bg-cyan-100 p-3 shadow-neo xl:block">
+          <Sprout size={24} />
+        </div>
+        <FloatingBalloon className="left-8 top-[47%] hidden xl:block" colorClass="bg-hot" tailClass="border-t-hot" delay={0.25} />
+        <FloatingBalloon className="right-8 bottom-24 hidden xl:block" colorClass="bg-butter" tailClass="border-t-butter" delay={0.6} size="sm" />
+        <div className="shell relative">
           <div className="grid gap-10 rounded-neo border-2 border-ink bg-white p-6 shadow-neo lg:grid-cols-[.8fr_1.2fr] lg:p-10">
             <div className="rounded-neo border-2 border-ink bg-berry p-6 text-white shadow-neo sm:p-8">
               <p className="neo-badge">Hagamos magia</p>
@@ -162,6 +190,7 @@ export default function Contact() {
               </button>
             </form>
           </div>
+          
         </div>
       </section>
     </>
