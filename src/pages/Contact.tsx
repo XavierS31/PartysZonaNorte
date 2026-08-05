@@ -1,59 +1,10 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { CakeSlice, Flower2, Gift, Loader2, Mail, MapPin, MessageCircle, PartyPopper, Phone, Sprout, ToyBrick } from 'lucide-react'
-import { useSearchParams } from 'react-router-dom'
+import { CakeSlice, Flower2, Gift, Instagram, Mail, MapPin, MessageCircle, Phone, Sprout, ToyBrick } from 'lucide-react'
 import { business } from '../config/business'
-import { sendContactEmail, type ContactPayload } from '../services/email'
 import { Seo } from '../components/Seo'
 import { FloatingBalloon } from '../components/FloatingBalloon'
 
-const schema = z.object({
-  firstName: z.string().min(2, 'Escribe tu nombre'),
-  lastName: z.string().min(2, 'Escribe tu apellido'),
-  email: z.string().email('Ingresa un correo válido'),
-  phone: z.string().min(7, 'Ingresa un teléfono válido'),
-  subject: z.string().min(3, 'Agrega un asunto'),
-  message: z.string().min(10, 'Cuéntanos un poco más'),
-})
-
 export default function Contact() {
-  const [status, setStatus] = useState<{ type: 'ok' | 'error'; text: string } | null>(null)
-  const [params] = useSearchParams()
-  const requestedService = params.get('service')
-  const requestedProduct = params.get('product')
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm<ContactPayload>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      subject: requestedService ? `Solicitud: ${requestedService}` : '',
-      message: requestedService
-        ? `Hola, me gustaría solicitar algo como ${requestedProduct || 'esta creación'} en la categoría ${requestedService}.`
-        : '',
-    },
-  })
-  const submit = async (data: ContactPayload) => {
-    setStatus(null)
-    try {
-      await sendContactEmail(data)
-      setStatus({ type: 'ok', text: '¡Gracias! Tu mensaje fue enviado a nuestro equipo.' })
-      reset()
-    } catch (error) {
-      setStatus({
-        type: 'error',
-        text: error instanceof Error ? error.message : 'Algo salió mal. Por favor, inténtalo de nuevo.',
-      })
-    }
-  }
-  const err = (error?: { message?: string }) =>
-    error && <p className="mt-1 text-xs text-[#ba1a1a]">{error.message}</p>
-
   return (
     <>
       <Seo title="Contacto" />
@@ -85,8 +36,8 @@ export default function Contact() {
         <FloatingBalloon className="left-8 top-[47%] hidden xl:block" colorClass="bg-hot" tailClass="border-t-hot" delay={0.25} />
         <FloatingBalloon className="right-8 bottom-24 hidden xl:block" colorClass="bg-butter" tailClass="border-t-butter" delay={0.6} size="sm" />
         <div className="shell relative">
-          <div className="grid gap-10 rounded-neo border-2 border-ink bg-white p-6 shadow-neo lg:grid-cols-[.8fr_1.2fr] lg:p-10">
-            <div className="rounded-neo border-2 border-ink bg-berry p-6 text-white shadow-neo sm:p-8">
+          <div className="grid gap-8 rounded-neo border-2 border-ink bg-white p-6 shadow-neo lg:grid-cols-2 lg:items-stretch lg:p-10">
+            <div className="flex h-full flex-col rounded-neo border-2 border-ink bg-berry p-6 text-white shadow-neo sm:p-8">
               <p className="neo-badge">Hagamos magia</p>
               <h1 className="mt-5 text-3xl font-extrabold uppercase tracking-tight sm:text-4xl">
                 Cuéntanos sobre tu celebración.
@@ -125,72 +76,48 @@ export default function Contact() {
                     {business.address}
                   </span>
                 </p>
-                <div className="rounded-neo border-2 border-ink bg-[#25D366] p-5 text-ink shadow-neo">
-                  <p className="font-display font-bold">¿Quieres contactarnos por WhatsApp?</p>
+              </div>
+            </div>
+            <aside className="flex h-full flex-col rounded-neo border-2 border-ink bg-cyan p-6 text-white shadow-neo sm:p-8">
+              <p className="neo-badge bg-white">Síguenos</p>
+              <h2 className="mt-5 text-2xl font-extrabold uppercase tracking-tight">Hablemos y mantente al día.</h2>
+              <p className="mt-3 text-sm leading-6">Consulta por WhatsApp los productos que quieres comprar o síguenos en Instagram para ver las novedades.</p>
+              <div className="mt-auto grid gap-5 pt-8">
+                <div className="rounded-neo border-2 border-ink bg-[#25D366] p-6 text-ink shadow-neo sm:p-7">
+                  <div className="flex items-center gap-3">
+                    <MessageCircle size={29} strokeWidth={2.5} />
+                    <p className="font-display text-xl font-extrabold uppercase tracking-tight">
+                      Contáctanos por WhatsApp
+                    </p>
+                  </div>
                   <a
                     href={`https://wa.me/${business.whatsapp}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="neo-btn-white mt-4"
+                    className="neo-btn-white mt-5 w-full justify-center py-3 text-sm uppercase"
                   >
                     <MessageCircle size={18} />
-                    Escríbenos por WhatsApp
+                    Ir a WhatsApp
+                  </a>
+                </div>
+                <div className="rounded-neo border-2 border-ink bg-[linear-gradient(135deg,#833AB4_0%,#FD1D1D_52%,#FCAF45_100%)] p-6 text-white shadow-neo sm:p-7">
+                  <div className="flex items-center gap-3">
+                    <Instagram size={29} strokeWidth={2.5} />
+                    <p className="font-display text-xl font-extrabold uppercase tracking-tight">Síguenos en Instagram</p>
+                  </div>
+                  <a
+                    href={`https://www.instagram.com/${business.instagram}/`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="neo-btn-white mt-5 w-full justify-center py-3 text-sm uppercase"
+                  >
+                    <Instagram size={18} />
+                    @{business.instagram}
                   </a>
                 </div>
               </div>
-            </div>
-            <form
-              noValidate
-              onSubmit={handleSubmit(submit)}
-              className="rounded-neo border-2 border-ink bg-cyan p-6 text-white shadow-neo sm:p-8"
-            >
-              <div className="grid gap-5 sm:grid-cols-2">
-                <label className="text-sm font-bold">
-                  Nombre
-                  <input {...register('firstName')} className="field" />
-                  {err(errors.firstName)}
-                </label>
-                <label className="text-sm font-bold">
-                  Apellido
-                  <input {...register('lastName')} className="field" />
-                  {err(errors.lastName)}
-                </label>
-                <label className="text-sm font-bold">
-                  Correo electrónico
-                  <input type="email" {...register('email')} className="field" />
-                  {err(errors.email)}
-                </label>
-                <label className="text-sm font-bold">
-                  Teléfono
-                  <input type="tel" {...register('phone')} className="field" />
-                  {err(errors.phone)}
-                </label>
-              </div>
-              <label className="mt-5 block text-sm font-bold">
-                Asunto
-                <input {...register('subject')} className="field" />
-                {err(errors.subject)}
-              </label>
-              <label className="mt-5 block text-sm font-bold">
-                Mensaje
-                <textarea rows={5} {...register('message')} className="field resize-y" />
-                {err(errors.message)}
-              </label>
-              {status && (
-                <div
-                  role="status"
-                  className={`mt-5 rounded-xl p-3 text-sm ${status.type === 'ok' ? 'bg-cyan-100 text-cyan' : 'bg-red-50 text-[#ba1a1a]'}`}
-                >
-                  {status.text}
-                </div>
-              )}
-              <button disabled={isSubmitting} className="neo-btn-primary mt-6 w-full disabled:opacity-60">
-                {isSubmitting && <Loader2 size={17} className="animate-spin" />}
-                {isSubmitting ? 'Enviando…' : 'Enviar mensaje'}
-              </button>
-            </form>
+            </aside>
           </div>
-          
         </div>
       </section>
     </>
