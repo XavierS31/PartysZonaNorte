@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import { Navbar } from './components/Navbar'
@@ -16,6 +16,10 @@ function Loading() {
 
 export default function App() {
   const location = useLocation()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-gradient-to-b from-pink-50 via-mist to-cyan-50">

@@ -2,15 +2,19 @@ import { Link } from 'react-router-dom'
 import { ArrowUp, Instagram } from 'lucide-react'
 import { business } from '../config/business'
 
-const logo = new URL('../../assets/logo2-white-small.png', import.meta.url).href
+const logo = new URL('../../assets/logo.jpg', import.meta.url).href
 
 export function Footer() {
   return (
     <footer className="border-t-2 border-ink bg-hot text-white">
       <div className="shell flex flex-wrap items-center justify-between gap-6 py-8">
         <div className="flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center overflow-hidden rounded-full bg-white">
-            <img src={logo} alt="Logo de PartyZonaNorte" className="h-16 w-16 object-contain" />
+          <span className="grid h-20 w-20 shrink-0 place-items-center overflow-hidden rounded-full border-2 border-ink bg-white shadow-neo">
+            <img
+              src={logo}
+              alt="Logo de PartyZonaNorte"
+              className="h-full w-full scale-125 object-cover object-center -translate-y-1"
+            />
           </span>
           <div>
             <p className="font-display text-sm font-extrabold uppercase tracking-wide">PartyZonaNorte</p>
