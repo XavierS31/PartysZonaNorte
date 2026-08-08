@@ -20,8 +20,15 @@ import { Link } from 'react-router-dom'
 import { business } from '../config/business'
 import { Seo } from '../components/Seo'
 import { FloatingBalloon } from '../components/FloatingBalloon'
-import { useCatalog } from '../contexts/CatalogContext'
 import birthdayPhoto from '../../assets/services/bouquet2.jpeg'
+import ancheta1 from '../../assets/services/ancheta1.webp'
+import ancheta2 from '../../assets/services/ancheta2.webp'
+import bouquet1 from '../../assets/services/bouquet1.webp'
+import bouquet2 from '../../assets/services/bouquet2.jpeg'
+import decoracion1 from '../../assets/services/decoracion1.webp'
+import decoracion2 from '../../assets/services/decoracion2.webp'
+import flores1 from '../../assets/services/flores1.webp'
+import flores2 from '../../assets/services/flores2.webp'
 
 const services = [
   {
@@ -76,25 +83,29 @@ const services = [
 ]
 
 const featuredCreations = [
-  { primaryId: 'decoracion1', alternateId: 'decoracion2' },
-  { primaryId: 'flores2', alternateId: 'flores1' },
-  { primaryId: 'ancheta2', alternateId: 'ancheta1' },
-  { primaryId: 'bouquet1', alternateId: 'bouquet2' },
+  {
+    service: 'Decoraciones con Globos',
+    primary: { image: decoracion1, title: 'Decoración Minnie Mouse', ratio: '445 / 769' },
+    alternate: { image: decoracion2, title: 'Decoración personalizada', ratio: '585 / 769' },
+  },
+  {
+    service: 'Arreglos Florales',
+    primary: { image: flores2, title: 'Arreglo floral de bienvenida', ratio: '620 / 899' },
+    alternate: { image: flores1, title: 'Arreglo floral', ratio: '781 / 769' },
+  },
+  {
+    service: 'Anchetas',
+    primary: { image: ancheta2, title: 'Ancheta Día de Madres', ratio: '539 / 769' },
+    alternate: { image: ancheta1, title: 'Ancheta Día de Madres', ratio: '658 / 769' },
+  },
+  {
+    service: 'Bouquet de Globos',
+    primary: { image: bouquet1, title: 'Bouquet de cumpleaños', ratio: '501 / 769' },
+    alternate: { image: bouquet2, title: 'Bouquet de bodas', ratio: '1073 / 1422' },
+  },
 ]
 
-const creationImageRatios: Record<string, string> = {
-  decoracion1: '445 / 769',
-  decoracion2: '585 / 769',
-  flores1: '781 / 769',
-  flores2: '620 / 899',
-  ancheta1: '658 / 769',
-  ancheta2: '539 / 769',
-  bouquet1: '501 / 769',
-  bouquet2: '1073 / 1422',
-}
-
 export default function Home() {
-  const { items } = useCatalog()
   const [toggledCreation, setToggledCreation] = useState<string | null>(null)
 
   return (
@@ -262,45 +273,45 @@ export default function Home() {
               Ver catálogo
             </Link>
           </div>
-          <div className="mt-8 flex items-start snap-x snap-mandatory gap-6 overflow-x-auto pb-5">
-            {featuredCreations.map(({ primaryId, alternateId }, index) => {
-              const primary = items.find((product) => product.id === primaryId)
-              const alternate = items.find((product) => product.id === alternateId)
-              if (!primary || !alternate) return null
-              const isToggled = toggledCreation === primaryId
-              const activeProduct = isToggled ? alternate : primary
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:items-start">
+            {featuredCreations.map(({ service, primary, alternate }, index) => {
+              const isToggled = toggledCreation === service
+              const activeCreation = isToggled ? alternate : primary
 
               return (
                 <motion.button
                   layout
-                  key={primaryId}
+                  key={service}
                   type="button"
                   aria-pressed={isToggled}
-                  aria-label={`Cambiar imagen de ${primary.service}`}
+                  aria-label={`Cambiar imagen de ${service}`}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   whileHover={{ y: -10, rotate: index % 2 ? -1.5 : 1.5, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.08, type: 'spring', stiffness: 240, damping: 18 }}
-                  onClick={() => setToggledCreation(isToggled ? null : primaryId)}
-                  className="group relative w-[260px] shrink-0 snap-start overflow-hidden rounded-neo border-2 border-black text-left shadow-neo-lg sm:w-[290px] xl:w-auto xl:flex-1"
-                  style={{ perspective: 1000, aspectRatio: creationImageRatios[activeProduct.id] }}
+                  onClick={() => setToggledCreation(isToggled ? null : service)}
+                  className="group overflow-hidden rounded-neo border-2 border-black bg-white text-left shadow-neo-lg"
+                  style={{ perspective: 1000 }}
                 >
-                  <AnimatePresence mode="wait" initial={false}>
-                    <motion.img
-                      key={activeProduct.id}
-                      src={activeProduct.image}
-                      alt={activeProduct.title}
-                      initial={{ opacity: 0, scale: 1.1, rotateY: -16 }}
-                      animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                      exit={{ opacity: 0, scale: 0.94, rotateY: 16 }}
-                      transition={{ duration: 0.35 }}
-                      className="absolute inset-0 h-full w-full bg-white object-contain"
-                    />
-                  </AnimatePresence>
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 via-ink/45 to-transparent p-5 text-white">
-                    <p className="font-display text-sm font-extrabold uppercase">{activeProduct.service}</p>
+                  <div className="relative overflow-hidden bg-white" style={{ aspectRatio: activeCreation.ratio }}>
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.img
+                        key={activeCreation.image}
+                        src={activeCreation.image}
+                        alt={activeCreation.title}
+                        initial={{ opacity: 0, scale: 1.1, rotateY: -16 }}
+                        animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                        exit={{ opacity: 0, scale: 0.94, rotateY: 16 }}
+                        transition={{ duration: 0.35 }}
+                        className="absolute inset-0 h-full w-full object-contain"
+                      />
+                    </AnimatePresence>
+                  </div>
+                  <div className="border-t-2 border-ink bg-white p-4 text-ink [&>p:last-child]:text-hot">
+                    <p className="font-display text-sm font-extrabold uppercase">{service}</p>
+                    <p className="mt-1 text-sm text-muted">{activeCreation.title}</p>
                     <p className="mt-1 text-xs text-white/85">Toca para cambiar la creación</p>
                   </div>
                 </motion.button>
