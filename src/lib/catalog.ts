@@ -42,4 +42,19 @@ export const catalogApi = {
     if (error) throw error
     return toCatalogItem(data as CatalogRow)
   },
+
+  async uploadImage(file: File): Promise<string> {
+    if (!isSupabaseConfigured) throw new Error('Supabase no est\u00e1 configurado.')
+    const extension = file.name.split('.').pop()?.replace(/[^a-z0-9]/gi, '').toLowerCase() || 'jpg'
+    const path = `catalog/${crypto.randomUUID()}.${extension}`
+    const { error } = await limitCatalogRequest(async () =>
+      await supabase.storage.from('catalog-images').upload(path, file, {
+        cacheControl: '3600',
+        contentType: file.type,
+        upsert: false,
+      }),
+    )
+    if (error) throw error
+    return supabase.storage.from('catalog-images').getPublicUrl(path).data.publicUrl
+  },
 }

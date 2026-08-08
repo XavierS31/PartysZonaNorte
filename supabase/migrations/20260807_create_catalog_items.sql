@@ -35,6 +35,20 @@ $$;
 revoke all on function public.is_catalog_admin() from public;
 grant execute on function public.is_catalog_admin() to authenticated;
 
+insert into storage.buckets (id, name, public)
+values ('catalog-images', 'catalog-images', true)
+on conflict (id) do update set public = true;
+
+drop policy if exists "public catalog images read" on storage.objects;
+create policy "public catalog images read"
+  on storage.objects for select
+  using (bucket_id = 'catalog-images');
+
+drop policy if exists "admins upload catalog images" on storage.objects;
+create policy "admins upload catalog images"
+  on storage.objects for insert to authenticated
+  with check (bucket_id = 'catalog-images' and public.is_catalog_admin());
+
 -- The public site may read its catalog. Writes are restricted both here and in the UI.
 grant select on public.catalog_items to anon, authenticated;
 grant insert on public.catalog_items to authenticated;

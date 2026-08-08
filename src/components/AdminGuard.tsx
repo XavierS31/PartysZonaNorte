@@ -5,6 +5,7 @@ export function AdminGuard({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false)
   const [checking, setChecking] = useState(true)
   const [denied, setDenied] = useState(false)
+  const [accessError, setAccessError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!isSupabaseConfigured) {
@@ -27,10 +28,12 @@ export function AdminGuard({ children }: { children: ReactNode }) {
       if (error || data !== true) {
         setIsAdmin(false)
         setDenied(true)
+        setAccessError(error ? `No se pudo comprobar el acceso: ${error.message}` : null)
         void supabase.auth.signOut()
       } else {
         setIsAdmin(true)
         setDenied(false)
+        setAccessError(null)
       }
       setChecking(false)
     }
@@ -63,7 +66,7 @@ export function AdminGuard({ children }: { children: ReactNode }) {
   if (!isAdmin) {
     return (
       <AccessPanel
-        message={denied ? 'Esta cuenta no tiene permiso para administrar el cat\u00e1logo.' : 'Inicia sesi\u00f3n con una cuenta autorizada para administrar el cat\u00e1logo.'}
+        message={accessError || (denied ? 'Esta cuenta no tiene permiso para administrar el cat\u00e1logo.' : 'Inicia sesi\u00f3n con una cuenta autorizada para administrar el cat\u00e1logo.')}
         action={<button onClick={() => void signIn()} className="neo-btn-primary">Continuar con Google</button>}
       />
     )
@@ -77,7 +80,7 @@ function AccessPanel({ message, action }: { message: string; action?: ReactNode 
     <section className="section grid min-h-[60vh] place-items-center bg-gradient-to-br from-pink-50 via-white to-cyan-100">
       <div className="neo-card max-w-lg p-8 text-center sm:p-10">
         <p className="neo-badge bg-butter">Acceso restringido</p>
-        <h1 className="mt-5 text-2xl font-extrabold uppercase">Portal de administraci\u00f3n</h1>
+        <h1 className="mt-5 text-2xl font-extrabold uppercase">Portal de administracion</h1>
         <p className="mt-4 leading-7 text-muted">{message}</p>
         {action && <div className="mt-7">{action}</div>}
       </div>
