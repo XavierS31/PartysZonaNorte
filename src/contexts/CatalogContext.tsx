@@ -9,6 +9,8 @@ type CatalogContextValue = {
   isLoading: boolean
   error: string | null
   addItem: (item: NewCatalogItem) => Promise<CatalogItem>
+  updateItem: (id: string, item: NewCatalogItem) => Promise<CatalogItem>
+  deleteItem: (id: string) => Promise<void>
 }
 
 const CatalogContext = createContext<CatalogContextValue | null>(null)
@@ -43,9 +45,16 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
 
     const channel = supabase
       .channel('catalog-items-inserts')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'catalog_items' }, (payload) => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'catalog_items' }, (payload) => {
+        if (payload.eventType === 'DELETE') {
+          setItems((current) => current.filter(({ id }) => id !== payload.old.id))
+          return
+        }
         const item = payload.new as CatalogItem
-        setItems((current) => current.some(({ id }) => id === item.id) ? current : [...current, item])
+        setItems((current) => {
+          const exists = current.some(({ id }) => id === item.id)
+          return exists ? current.map((entry) => entry.id === item.id ? item : entry) : [...current, item]
+        })
       })
       .subscribe()
 
@@ -63,6 +72,15 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
       const created = await catalogApi.create(item)
       setItems((current) => current.some(({ id }) => id === created.id) ? current : [...current, created])
       return created
+    },
+    async updateItem(id, item) {
+      const updated = await catalogApi.update(id, item)
+      setItems((current) => current.map((entry) => entry.id === id ? updated : entry))
+      return updated
+    },
+    async deleteItem(id) {
+      await catalogApi.remove(id)
+      setItems((current) => current.filter((entry) => entry.id !== id))
     },
   }), [error, isLoading, items])
 

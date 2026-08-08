@@ -43,6 +43,26 @@ export const catalogApi = {
     return toCatalogItem(data as CatalogRow)
   },
 
+  async update(id: string, item: NewCatalogItem): Promise<CatalogItem> {
+    const { data, error } = await limitCatalogRequest(async () =>
+      await supabase
+        .from('catalog_items')
+        .update({ ...item, badge: item.badge || null })
+        .eq('id', id)
+        .select('id, title, service, image, badge, description')
+        .single(),
+    )
+    if (error) throw error
+    return toCatalogItem(data as CatalogRow)
+  },
+
+  async remove(id: string): Promise<void> {
+    const { error } = await limitCatalogRequest(async () =>
+      await supabase.from('catalog_items').delete().eq('id', id),
+    )
+    if (error) throw error
+  },
+
   async uploadImage(file: File): Promise<string> {
     if (!isSupabaseConfigured) throw new Error('Supabase no est\u00e1 configurado.')
     const extension = file.name.split('.').pop()?.replace(/[^a-z0-9]/gi, '').toLowerCase() || 'jpg'

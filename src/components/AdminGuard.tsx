@@ -50,7 +50,8 @@ export function AdminGuard({ children }: { children: ReactNode }) {
     setDenied(false)
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/admin` },
+      // Always return to the live site currently open in the browser.
+      options: { redirectTo: new URL('/admin', window.location.origin).toString() },
     })
     if (error) setDenied(true)
   }

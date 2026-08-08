@@ -52,6 +52,7 @@ create policy "admins upload catalog images"
 -- The public site may read its catalog. Writes are restricted both here and in the UI.
 grant select on public.catalog_items to anon, authenticated;
 grant insert on public.catalog_items to authenticated;
+grant update, delete on public.catalog_items to authenticated;
 revoke insert, update, delete on public.catalog_items from anon;
 revoke update, delete on public.catalog_items from authenticated;
 
@@ -65,6 +66,17 @@ drop policy if exists "Allow admin modifications" on public.catalog_items;
 create policy "approved admins insert catalog items"
   on public.catalog_items for insert to authenticated
   with check (public.is_catalog_admin());
+
+drop policy if exists "approved admins update catalog items" on public.catalog_items;
+create policy "approved admins update catalog items"
+  on public.catalog_items for update to authenticated
+  using (public.is_catalog_admin())
+  with check (public.is_catalog_admin());
+
+drop policy if exists "approved admins delete catalog items" on public.catalog_items;
+create policy "approved admins delete catalog items"
+  on public.catalog_items for delete to authenticated
+  using (public.is_catalog_admin());
 
 -- Needed only when you want already-open public pages to receive inserts live.
 alter table public.catalog_items replica identity full;
