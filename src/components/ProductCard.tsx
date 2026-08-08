@@ -67,16 +67,11 @@ export function ProductCard({ product }: { product: Product }) {
                 </span>
                 <h2 className="mt-4 font-display text-2xl font-extrabold uppercase">{product.title}</h2>
                 <p className="mt-4 leading-7 text-muted">{product.description}</p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {product.colors.map((color) => (
-                    <span
-                      key={color}
-                      className="rounded-full border border-ink bg-butter/40 px-3 py-1 text-xs font-bold"
-                    >
-                      {color}
-                    </span>
-                  ))}
-                </div>
+                {product.badge && (
+                  <span className="mt-6 inline-flex rounded-full border border-ink bg-butter/40 px-3 py-1 text-xs font-bold">
+                    {product.badge}
+                  </span>
+                )}
                 <Link
                   to={`/contact?${contactSearch}`}
                   className="neo-btn-primary mt-8 w-full"

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowUp, Instagram } from 'lucide-react'
+import { ArrowUp, Instagram, LockKeyhole } from 'lucide-react'
 import { business } from '../config/business'
 
 const logo = new URL('../../assets/logo.jpg', import.meta.url).href
@@ -45,6 +45,9 @@ export function Footer() {
             <Instagram size={14} />
             Instagram
           </a>
+          <Link to="/admin" aria-label="Administrar cat\u00e1logo" className="opacity-60 transition hover:text-butter hover:opacity-100">
+            <LockKeyhole size={13} />
+          </Link>
         </div>
         <button
           aria-label="Volver arriba"

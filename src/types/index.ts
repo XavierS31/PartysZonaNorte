@@ -1,11 +1,11 @@
-export type Product = {
+export type CatalogItem = {
   id: string
   title: string
-  price: number
   service: string
   image: string
   badge?: string
   description: string
-  colors: string[]
-  inStock: boolean
 }
+
+// Product is kept as an alias so existing presentational components stay simple.
+export type Product = CatalogItem

@@ -20,7 +20,7 @@ import { Link } from 'react-router-dom'
 import { business } from '../config/business'
 import { Seo } from '../components/Seo'
 import { FloatingBalloon } from '../components/FloatingBalloon'
-import { products } from '../data/products'
+import { useCatalog } from '../contexts/CatalogContext'
 import birthdayPhoto from '../../assets/services/bouquet2.jpeg'
 
 const services = [
@@ -94,6 +94,7 @@ const creationImageRatios: Record<string, string> = {
 }
 
 export default function Home() {
+  const { items } = useCatalog()
   const [toggledCreation, setToggledCreation] = useState<string | null>(null)
 
   return (
@@ -263,8 +264,8 @@ export default function Home() {
           </div>
           <div className="mt-8 flex items-start snap-x snap-mandatory gap-6 overflow-x-auto pb-5">
             {featuredCreations.map(({ primaryId, alternateId }, index) => {
-              const primary = products.find((product) => product.id === primaryId)
-              const alternate = products.find((product) => product.id === alternateId)
+              const primary = items.find((product) => product.id === primaryId)
+              const alternate = items.find((product) => product.id === alternateId)
               if (!primary || !alternate) return null
               const isToggled = toggledCreation === primaryId
               const activeProduct = isToggled ? alternate : primary

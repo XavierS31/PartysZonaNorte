@@ -37,13 +37,10 @@ const descriptions: Record<string, string> = {
 const item = (id: string, title: string, service: string, image: string, badge?: string): Product => ({
   id,
   title,
-  price: 0,
   service,
   image,
   badge,
   description: descriptions[service],
-  colors: ['Personalizado'],
-  inStock: true,
 })
 
 export const products: Product[] = [

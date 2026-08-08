@@ -5,15 +5,17 @@ import { useSearchParams } from 'react-router-dom'
 import { ProductCard } from '../components/ProductCard'
 import { FloatingBalloon } from '../components/FloatingBalloon'
 import { Seo } from '../components/Seo'
-import { products, services } from '../data/products'
+import { services } from '../data/products'
+import { useCatalog } from '../contexts/CatalogContext'
 
 export default function Products() {
+  const { items, isLoading } = useCatalog()
   const [params, setParams] = useSearchParams()
   const [search, setSearch] = useState('')
   const service = params.get('service') || 'Todas'
   const filtered = useMemo(
-    () => products.filter((product) => (service === 'Todas' || product.service === service) && product.title.toLowerCase().includes(search.toLowerCase())),
-    [search, service],
+    () => items.filter((product) => (service === 'Todas' || product.service === service) && product.title.toLowerCase().includes(search.toLowerCase())),
+    [items, search, service],
   )
   const setService = (value: string) => setParams(value === 'Todas' ? {} : { service: value })
 
@@ -106,7 +108,7 @@ export default function Products() {
               <PartyPopper size={17} />
             </span>
             <p className="font-display text-sm font-bold text-muted">
-              Mostrando {filtered.length} {filtered.length === 1 ? 'servicio' : 'servicios'} para celebrar
+              {isLoading ? 'Cargando cat\u00e1logo...' : `Mostrando ${filtered.length} ${filtered.length === 1 ? 'servicio' : 'servicios'} para celebrar`}
             </p>
           </div>
 

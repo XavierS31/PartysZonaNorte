@@ -9,6 +9,7 @@ const Home = lazy(() => import('./pages/Home'))
 const Products = lazy(() => import('./pages/Products'))
 const About = lazy(() => import('./pages/About'))
 const Contact = lazy(() => import('./pages/Contact'))
+const Admin = lazy(() => import('./pages/Admin'))
 
 function Loading() {
   return <div className="grid min-h-[60vh] place-items-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-pink-200 border-t-hot" aria-label="Cargando" /></div>
@@ -32,6 +33,7 @@ export default function App() {
               <Route path="/about" element={<About />} />
               <Route path="/products" element={<Products />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/admin" element={<Admin />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>

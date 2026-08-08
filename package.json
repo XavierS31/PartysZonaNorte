@@ -3,10 +3,16 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "scripts": { "dev": "vite", "build": "tsc -b && vite build", "lint": "eslint .", "preview": "vite preview" },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@hookform/resolvers": "^3.9.1",
+    "@supabase/supabase-js": "^2.112.2",
     "framer-motion": "^11.15.0",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
