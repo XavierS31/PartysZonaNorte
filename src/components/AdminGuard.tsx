@@ -1,15 +1,8 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import type { User } from '@supabase/supabase-js'
 import { isSupabaseConfigured, supabase } from '../lib/supabase'
 
-const allowedEmails = new Set(['EMAIL', 'EMAIL2'])
-
-function isAllowed(user: User | null) {
-  return Boolean(user?.email && allowedEmails.has(user.email.toLowerCase()))
-}
-
 export function AdminGuard({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [checking, setChecking] = useState(true)
   const [denied, setDenied] = useState(false)
 
@@ -20,21 +13,30 @@ export function AdminGuard({ children }: { children: ReactNode }) {
     }
 
     let active = true
-    const applySession = (nextUser: User | null) => {
+    const applySession = async (hasUser: boolean) => {
       if (!active) return
-      if (nextUser && !isAllowed(nextUser)) {
-        setUser(null)
+      if (!hasUser) {
+        setIsAdmin(false)
+        setChecking(false)
+        return
+      }
+
+      // This RPC returns only a boolean; the allowlist stays in Supabase.
+      const { data, error } = await supabase.rpc('is_catalog_admin')
+      if (!active) return
+      if (error || data !== true) {
+        setIsAdmin(false)
         setDenied(true)
         void supabase.auth.signOut()
       } else {
-        setUser(nextUser)
+        setIsAdmin(true)
         setDenied(false)
       }
       setChecking(false)
     }
 
-    void supabase.auth.getSession().then(({ data }) => applySession(data.session?.user ?? null))
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => applySession(session?.user ?? null))
+    void supabase.auth.getSession().then(({ data }) => applySession(Boolean(data.session?.user)))
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => void applySession(Boolean(session?.user)))
     return () => {
       active = false
       listener.subscription.unsubscribe()
@@ -58,7 +60,7 @@ export function AdminGuard({ children }: { children: ReactNode }) {
     return <AccessPanel message="Faltan las variables SUPABASE_URL y SUPABASE_ANON_KEY." />
   }
 
-  if (!user) {
+  if (!isAdmin) {
     return (
       <AccessPanel
         message={denied ? 'Esta cuenta no tiene permiso para administrar el cat\u00e1logo.' : 'Inicia sesi\u00f3n con una cuenta autorizada para administrar el cat\u00e1logo.'}

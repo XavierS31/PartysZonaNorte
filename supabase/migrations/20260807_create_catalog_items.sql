@@ -12,6 +12,29 @@ create table if not exists public.catalog_items (
 
 alter table public.catalog_items enable row level security;
 
+-- This table has no client read policy. It keeps administrator addresses out
+-- of the frontend bundle and out of the public catalog policy.
+create table if not exists public.catalog_admins (
+  email text primary key check (email = lower(trim(email)))
+);
+alter table public.catalog_admins enable row level security;
+revoke all on public.catalog_admins from anon, authenticated;
+
+create or replace function public.is_catalog_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from public.catalog_admins
+    where email = lower(coalesce(auth.jwt() ->> 'email', ''))
+  );
+$$;
+revoke all on function public.is_catalog_admin() from public;
+grant execute on function public.is_catalog_admin() to authenticated;
+
 -- The public site may read its catalog. Writes are restricted both here and in the UI.
 grant select on public.catalog_items to anon, authenticated;
 grant insert on public.catalog_items to authenticated;
@@ -24,16 +47,10 @@ create policy "public catalog read"
   using (true);
 
 drop policy if exists "approved admins insert catalog items" on public.catalog_items;
--- Example RLS Policy fix for catalog_items
-CREATE POLICY "Allow admin modifications"
-ON public.catalog_items
-FOR ALL
-USING (
-  auth.jwt() ->> 'email' IN ('danabaso23@gmail.com', 'xaviersoto31@gmail.com')
-)
-WITH CHECK (
-  auth.jwt() ->> 'email' IN ('danabaso23@gmail.com', 'xaviersoto31@gmail.com')
-);
+drop policy if exists "Allow admin modifications" on public.catalog_items;
+create policy "approved admins insert catalog items"
+  on public.catalog_items for insert to authenticated
+  with check (public.is_catalog_admin());
 
 -- Needed only when you want already-open public pages to receive inserts live.
 alter table public.catalog_items replica identity full;
